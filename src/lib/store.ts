@@ -72,6 +72,10 @@ interface DesktopStore {
   // Selection
   selectedItemId: string | null;
   setSelectedItemId: (id: string | null) => void;
+  selectedIds: Set<string>;
+  setSelectedIds: (ids: Set<string>) => void;
+  toggleSelectedId: (id: string) => void;
+  clearSelection: () => void;
 
   // Persistence
   hydrated: boolean;
@@ -210,4 +214,16 @@ export const useDesktopStore = create<DesktopStore>((set, get) => ({
   // Selection
   selectedItemId: null,
   setSelectedItemId: (id) => set({ selectedItemId: id }),
+  selectedIds: new Set<string>(),
+  setSelectedIds: (ids) => set({ selectedIds: ids }),
+  toggleSelectedId: (id) => {
+    const current = new Set(get().selectedIds);
+    if (current.has(id)) {
+      current.delete(id);
+    } else {
+      current.add(id);
+    }
+    set({ selectedIds: current, selectedItemId: current.size > 0 ? id : null });
+  },
+  clearSelection: () => set({ selectedIds: new Set<string>(), selectedItemId: null }),
 }));

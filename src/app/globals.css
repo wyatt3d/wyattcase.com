@@ -1,44 +1,277 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   macOS Desktop Clone - Global Styles
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   CSS Custom Properties - macOS Color System
+   -------------------------------------------------------------------------- */
+:root {
+  --macos-accent: #007AFF;
+  --macos-red: #FF5F57;
+  --macos-yellow: #FEBC2E;
+  --macos-green: #28C840;
+  --macos-sidebar: rgba(30, 30, 30, 0.6);
+  --macos-toolbar: #2a2a2a;
+  --macos-window: #1e1e1e;
+  --macos-titlebar: #2a2a2a;
+  --macos-text: rgba(255, 255, 255, 0.85);
+  --macos-text-secondary: rgba(255, 255, 255, 0.55);
+  --macos-border: rgba(255, 255, 255, 0.1);
+  --macos-hover: rgba(255, 255, 255, 0.1);
+  --macos-selected: #3478f6;
+}
+
+/* --------------------------------------------------------------------------
+   Reset & Base Styles
+   -------------------------------------------------------------------------- */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro",
+    "SF Pro Display",
+    "SF Pro Text",
+    "Helvetica Neue",
+    "Segoe UI",
+    Roboto,
+    sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   background: #000;
-  color: #fff;
+  color: var(--macos-text);
 }
 
-/* Scrollbar styling */
+/* Disable text selection on UI chrome; allow in content areas */
+button,
+nav,
+header,
+[role="toolbar"],
+[role="menubar"],
+[role="menu"],
+[data-no-select] {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Re-enable selection in editors and content areas */
+[contenteditable="true"],
+textarea,
+input,
+pre,
+code,
+[data-allow-select] {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* --------------------------------------------------------------------------
+   Selection Color - macOS Blue
+   -------------------------------------------------------------------------- */
+::selection {
+  background: var(--macos-selected);
+  color: white;
+}
+
+::-moz-selection {
+  background: var(--macos-selected);
+  color: white;
+}
+
+/* --------------------------------------------------------------------------
+   Scrollbar Styling - macOS-like thin translucent
+   -------------------------------------------------------------------------- */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.3);
 }
 
-/* Generating animation for the dock */
-@keyframes bounce-dock {
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+/* --------------------------------------------------------------------------
+   Keyframe Animations
+   -------------------------------------------------------------------------- */
+
+/* Fade */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Slide */
+@keyframes slideUp {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+/* Scale */
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Dock bounce */
+@keyframes bounce {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+  25% { transform: translateY(-14px); }
+  50% { transform: translateY(-4px); }
+  75% { transform: translateY(-10px); }
 }
 
-/* Selection color */
-::selection {
-  background: #3478f6;
-  color: white;
+/* Loading spinner */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Pulse for generating / loading states */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Boot progress bar */
+@keyframes bootProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+/* --------------------------------------------------------------------------
+   Animation Utility Classes
+   -------------------------------------------------------------------------- */
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+.animate-fadeOut {
+  animation: fadeOut 0.2s ease-out forwards;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.25s ease-out forwards;
+}
+
+.animate-slideDown {
+  animation: slideDown 0.25s ease-out forwards;
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.3s ease-out forwards;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.2s ease-out forwards;
+}
+
+.animate-bounce {
+  animation: bounce 0.6s ease-in-out;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.animate-bootProgress {
+  animation: bootProgress 2s ease-in-out forwards;
+}
+
+/* --------------------------------------------------------------------------
+   Glass & Visual Effect Utilities
+   -------------------------------------------------------------------------- */
+
+/* Standard glass - light blur with translucent background */
+.glass {
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(30, 30, 30, 0.72);
+}
+
+/* Heavy glass - stronger blur for prominent surfaces */
+.glass-heavy {
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  background: rgba(30, 30, 30, 0.85);
+}
+
+/* Realistic multi-layered window shadow */
+.window-shadow {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.15),
+    0 24px 48px rgba(0, 0, 0, 0.2),
+    0 0 0 0.5px rgba(255, 255, 255, 0.08) inset;
+}
+
+/* Styled scrollbar modifier for individual containers */
+.macos-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.macos-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.macos-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+.macos-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.macos-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
