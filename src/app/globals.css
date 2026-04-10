@@ -1,30 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #ffffff;
-  --color-fg: #0a0a0a;
-  --color-muted: #6b7280;
-  --color-subtle: #f4f4f5;
-  --color-border: #e5e7eb;
+  --color-bg: #08080a;
+  --color-bg-elev: #0e0e11;
+  --color-fg: #f5f5f7;
+  --color-muted: #8a8a92;
+  --color-subtle: #17171c;
+  --color-border: #1e1e24;
+  --color-border-strong: #2a2a32;
 
-  --color-accent-blue: #2563eb;
-  --color-accent-green: #059669;
-  --color-accent-purple: #7c3aed;
-  --color-accent-orange: #ea580c;
-  --color-accent-pink: #db2777;
+  --color-accent-blue: #3b82f6;
+  --color-accent-green: #10b981;
+  --color-accent-purple: #a855f7;
+  --color-accent-orange: #f97316;
+  --color-accent-pink: #ec4899;
 
   --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", monospace;
-}
-
-@media (prefers-color-scheme: dark) {
-  @theme inline {
-    --color-bg: #0a0a0a;
-    --color-fg: #fafafa;
-    --color-muted: #9ca3af;
-    --color-subtle: #141414;
-    --color-border: #262626;
-  }
 }
 
 html,
@@ -45,4 +37,18 @@ body {
 ::selection {
   background: var(--color-accent-blue);
   color: white;
+}
+
+/* Subtle noise texture for richer dark surfaces */
+.noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(255, 255, 255, 0.015) 1px,
+    transparent 0
+  );
+  background-size: 4px 4px;
+  pointer-events: none;
 }

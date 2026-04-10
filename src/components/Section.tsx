@@ -10,21 +10,23 @@ type Props = {
 
 export function Section({ id, eyebrow, title, description, children }: Props) {
   return (
-    <section id={id} className="scroll-mt-24 py-16 sm:py-20">
-      <div className="mb-10 max-w-2xl">
-        {eyebrow && (
-          <div className="mb-2 font-mono text-xs uppercase tracking-wider text-[var(--color-muted)]">
-            {eyebrow}
-          </div>
-        )}
-        <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-          {title}
-        </h2>
-        {description && (
-          <p className="mt-3 text-base text-[var(--color-muted)]">
-            {description}
-          </p>
-        )}
+    <section id={id} className="scroll-mt-24 border-t border-[var(--color-border)] py-20">
+      <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+        <div className="max-w-xl">
+          {eyebrow && (
+            <div className="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-muted)]">
+              {eyebrow}
+            </div>
+          )}
+          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+            {title}
+          </h2>
+          {description && (
+            <p className="mt-4 text-base text-[var(--color-muted)]">
+              {description}
+            </p>
+          )}
+        </div>
       </div>
       {children}
     </section>

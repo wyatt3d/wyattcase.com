@@ -2,7 +2,7 @@
  * Site content.
  *
  * Adding a new tool:
- *   1. Add an entry to the `tools` or `tsrResources` array below.
+ *   1. Add an entry to `tools`, `tsrResources`, or `documents` below.
  *   2. That's it. No components to touch.
  *
  * Fields:
@@ -11,6 +11,8 @@
  *   url         — where the card links to
  *   tag         — optional pill (e.g. "beta", "internal", "new")
  *   accent      — optional color hint: "blue" | "green" | "purple" | "orange" | "pink"
+ *   image       — optional. Leave unset to auto-screenshot from `url` via thum.io.
+ *                 Or set to a local path ("/screenshots/foo.png") or full URL.
  */
 
 export type Item = {
@@ -19,13 +21,21 @@ export type Item = {
   url: string;
   tag?: string;
   accent?: "blue" | "green" | "purple" | "orange" | "pink";
+  image?: string;
 };
+
+/** Returns the image to display for an item. Falls back to a live screenshot. */
+export function imageForItem(item: Item): string {
+  if (item.image) return item.image;
+  // thum.io — free, no API key, generates a fresh screenshot on request.
+  return `https://image.thum.io/get/width/1600/crop/1000/noanimate/${item.url}`;
+}
 
 export const profile = {
   name: "Wyatt Case",
   role: "Building at Tax Sale Resources",
   tagline:
-    "A small hub for the tools, docs, and experiments I share with friends and coworkers.",
+    "A small hub for the tools, documents, and experiments I share with friends and coworkers.",
   email: "wyatt@auctionblock.org",
   github: "https://github.com/wyatt3d",
 };
@@ -95,10 +105,23 @@ export const tsrResources: Item[] = [
   },
 ];
 
+/**
+ * Featured — the handful of projects that should appear in the pinned strip
+ * at the top of the page. These also still appear in their home section below.
+ *
+ * To feature a new item: add its URL here. (Must match the `url` in one of
+ * the arrays below.)
+ */
+const featuredUrls = new Set<string>([
+  "https://tsr-social-posts.vercel.app",
+  "https://storyboard-generator-blush.vercel.app",
+  "https://acrobat-reader.vercel.app",
+]);
+
 /** Documents — shareable links (Google Docs, PDFs, Notion pages, etc.). */
 export const documents: Item[] = [
   {
-    name: "AuctionBlock Overview",
+    name: "AuctionBlock",
     description: "How our surplus recovery service works — for homeowners.",
     url: "https://www.auctionblock.org",
     accent: "blue",
@@ -110,3 +133,11 @@ export const documents: Item[] = [
     accent: "green",
   },
 ];
+
+/** Resolved featured items, in the order listed in featuredUrls. */
+export const featured: Item[] = (() => {
+  const all = [...tools, ...tsrResources, ...documents];
+  return Array.from(featuredUrls)
+    .map((url) => all.find((i) => i.url === url))
+    .filter((i): i is Item => Boolean(i));
+})();
