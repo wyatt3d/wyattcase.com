@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Reveal } from "@/components/Reveal";
-import { site, services, caseStudies, approach } from "@/lib/content";
+import { DedicatedMachine } from "@/components/DedicatedMachine";
+import { site, services, caseStudies, approach, dedicatedMachine } from "@/lib/content";
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
@@ -148,45 +149,65 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------- Compute cluster differentiator ---------- */}
-      <section className="border-t border-white/10 bg-[#0a0a0c]/55 backdrop-blur-2xl">
+      {/* ---------- Dedicated machine offer ---------- */}
+      <section id="dedicated" className="scroll-mt-24 border-t border-white/10 bg-[#0a0a0c]/60 backdrop-blur-2xl">
         <div className="mx-auto max-w-6xl px-6 py-24 sm:px-10">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            <Reveal>
-              <Eyebrow>The unfair advantage</Eyebrow>
-              <h2 className="mt-3 text-3xl font-light tracking-tight text-white sm:text-4xl">
-                I run my own always-on compute cluster.
-              </h2>
-              <p className="mt-5 max-w-xl text-[15px] font-light leading-relaxed text-white/70">
-                Most freelancers bill you for hours. I can hand you systems that
-                work on a schedule — overnight research runs, continuously-updated
-                datasets, knowledge bases that refresh themselves. A private,
-                three-node Apple Silicon cluster is dedicated to long-running
-                agents, so there&apos;s no per-token cloud bill spiraling out of
-                control and no cold starts.
-              </p>
-            </Reveal>
+          <Reveal className="text-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-amber-300/20 bg-amber-300/10 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-amber-200/90">
+              Dedicated Machine · {dedicatedMachine.price}{dedicatedMachine.cadence}
+            </div>
+            <h2 className="mx-auto mt-5 max-w-3xl text-balance text-3xl font-light tracking-tight text-white sm:text-4xl">
+              Rent a machine that works only for you.
+            </h2>
+            <p className="mx-auto mt-5 max-w-2xl text-[15px] font-light leading-relaxed text-white/70">
+              A dedicated Apple Silicon Mac mini, set up as your private
+              automation engine and running 24/7. I build and maintain the
+              agents, scrapers, and pipelines on it — and add any new tool you
+              want, whenever you think of it. No cloud bills, no cold starts, no
+              per-token surprises. One flat monthly price.
+            </p>
+          </Reveal>
 
-            <Reveal delay={120}>
-              <div className="grid grid-cols-3 gap-4">
-                {[
-                  { k: "3", v: "dedicated nodes" },
-                  { k: "24/7", v: "agent uptime" },
-                  { k: "0", v: "cold starts" },
-                ].map((stat) => (
-                  <div
-                    key={stat.v}
-                    className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-6 text-center"
-                  >
-                    <div className="text-3xl font-light text-white">{stat.k}</div>
-                    <div className="mt-1.5 text-[11px] font-light uppercase tracking-[0.12em] text-white/50">
-                      {stat.v}
-                    </div>
+          <Reveal delay={120} className="mt-14">
+            <DedicatedMachine />
+          </Reveal>
+
+          {/* Pricing card */}
+          <Reveal delay={120} className="mt-14">
+            <div className="mx-auto max-w-2xl overflow-hidden rounded-3xl border border-white/12 bg-white/[0.04]">
+              <div className="flex flex-col items-baseline gap-2 border-b border-white/10 px-7 py-7 sm:flex-row sm:justify-between">
+                <div>
+                  <div className="text-lg font-medium text-white">Your own dedicated machine</div>
+                  <div className="mt-1 text-[13px] font-light text-white/55">
+                    Reserved hardware + me, building whatever you need on it.
                   </div>
-                ))}
+                </div>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-light text-white">{dedicatedMachine.price}</span>
+                  <span className="text-[13px] font-light text-white/55">{dedicatedMachine.cadence}</span>
+                </div>
               </div>
-            </Reveal>
-          </div>
+              <ul className="grid gap-3 px-7 py-7 sm:grid-cols-2">
+                {dedicatedMachine.included.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-[14px] font-light leading-relaxed text-white/75">
+                    <span className="mt-0.5 text-amber-400">✓</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <div className="px-7 pb-7">
+                <a
+                  href={`mailto:${site.email}?subject=Dedicated%20Machine%20(%241%2C500%2Fmo)`}
+                  className="inline-flex w-full items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-medium text-black transition-transform hover:-translate-y-0.5 sm:w-auto"
+                >
+                  Claim your machine →
+                </a>
+                <p className="mt-3 text-[12px] font-light text-white/40">
+                  Tell me what you want it to do and I&apos;ll have it running for you, usually within a week.
+                </p>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 

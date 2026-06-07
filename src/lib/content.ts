@@ -239,6 +239,30 @@ export const caseStudies: CaseStudy[] = [
   },
 ];
 
+export const dedicatedMachine = {
+  price: "$1,500",
+  cadence: "/ month",
+  // Capabilities radiating from the machine in the showcase graphic. Keep labels short.
+  capabilities: [
+    { icon: "📚", label: "Self-updating knowledge bases" },
+    { icon: "🌙", label: "Overnight research runs" },
+    { icon: "🕸️", label: "Scheduled web scraping" },
+    { icon: "📊", label: "Recurring data pipelines" },
+    { icon: "🤖", label: "Custom agents & automations" },
+    { icon: "📥", label: "Reports to your inbox or Slack" },
+    { icon: "🛠️", label: "New tools added on request" },
+    { icon: "⚡", label: "Always-on, 24/7" },
+  ],
+  included: [
+    "A Mac mini reserved entirely for you, running 24/7",
+    "I build your first agent, scraper, or pipeline to get going",
+    "Any new tool or workflow you want — added on request",
+    "Ongoing monitoring, upkeep, and fixes",
+    "A direct line to me — no ticket queue",
+    "Month-to-month. Cancel anytime.",
+  ],
+};
+
 export type Step = { n: string; title: string; body: string };
 
 export const approach: Step[] = [
