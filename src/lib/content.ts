@@ -25,37 +25,37 @@ export const services: Service[] = [
   {
     title: "AI Knowledge Bases & RAG",
     blurb:
-      "Turn scattered docs, PDFs, and tribal knowledge into a searchable, citation-backed knowledge base your team and your AI can both query.",
+      "Your scattered docs, PDFs, and tribal knowledge become one searchable brain that answers with citations — so your team stops re-asking the same questions and your AI stops making things up.",
     points: ["Document ingestion & chunking", "Cited, hallucination-resistant answers", "Self-updating content pipelines"],
   },
   {
     title: "Autonomous & Agentic Systems",
     blurb:
-      "Recursive agents and self-updating pipelines that research, monitor, and produce work on a schedule — running 24/7 on dedicated hardware.",
+      "Agents that research, monitor, and produce work while you sleep — running 24/7 on dedicated hardware instead of racking up a cloud bill every time they think.",
     points: ["Recursive research loops", "Scheduled, unattended runs", "Human-in-the-loop review queues"],
   },
   {
     title: "Web Scraping & Data Pipelines",
     blurb:
-      "Reliable extraction at scale — cleaned, structured, and delivered on a recurring schedule. From a one-off dataset to an always-on monitor.",
+      "The data you need, pulled at scale, cleaned, deduped, and delivered on schedule — from a one-off dataset to an always-on monitor that never forgets to run.",
     points: ["Resilient, anti-brittle scrapers", "Structured + deduped output", "Recurring delivery on cron"],
   },
   {
     title: "Full-Stack Product Builds",
     blurb:
-      "Production web apps end to end — Next.js, TypeScript, Supabase/Postgres, auth, payments — deployed on Vercel. Idea to live in days, not months.",
+      "Your idea, live in production — Next.js, TypeScript, Supabase/Postgres, auth, payments, the works. Days to a real product, not months to a status update.",
     points: ["Next.js 16 + Supabase", "Auth, payments, dashboards", "Shipped to production fast"],
   },
   {
     title: "AI Feature Integration",
     blurb:
-      "Add RAG, structured output, tool-calling, and LLM workflows to an existing product — without the hallucinations and the runaway cost.",
+      "RAG, structured output, and tool-calling added to the product you already have — minus the hallucinations and the runaway token bill that scare most teams off.",
     points: ["Structured output & tool use", "Cost & latency control", "Eval-backed reliability"],
   },
   {
     title: "Programmatic SEO",
     blurb:
-      "Hundreds of fast, statically-rendered pages generated from your data — built to rank and to convert, not to look spammy.",
+      "Hundreds of fast, static pages generated from your data — built to rank and convert, capturing demand on autopilot instead of looking like spam.",
     points: ["Data-driven page generation", "Static rendering at scale", "Clean internal linking"],
   },
 ];
@@ -250,17 +250,21 @@ export const dedicatedMachine = {
     { icon: "📊", label: "Recurring data pipelines" },
     { icon: "🤖", label: "Custom agents & automations" },
     { icon: "📥", label: "Reports to your inbox or Slack" },
-    { icon: "🛠️", label: "New tools added on request" },
+    { icon: "🔒", label: "Secure Tailscale remote support" },
     { icon: "⚡", label: "Always-on, 24/7" },
   ],
   included: [
-    "A Mac mini reserved entirely for you, running 24/7",
-    "I build your first agent, scraper, or pipeline to get going",
-    "Any new tool or workflow you want — added on request",
-    "Ongoing monitoring, upkeep, and fixes",
-    "A direct line to me — no ticket queue",
-    "Month-to-month. Cancel anytime.",
+    "A Mac mini reserved 100% for you, humming 24/7 — no shared cloud, no cold starts, no per-token meter",
+    "I build your first agent, scraper, or pipeline myself — you go live, you don't go learning",
+    "Any new tool or workflow you dream up — added on request, no change orders",
+    "Secure Tailscale access into your machine — I jump on in seconds, no screen-share scheduling, no IT tickets",
+    "24-hour support, guaranteed — message me and you hear back within one business day, every time",
+    "A direct line to me — no ticket queue, no offshore tier-1",
+    "Month-to-month. Cancel anytime. Keep everything I built for you.",
   ],
+  // Risk reversal shown beneath the included list.
+  guarantee:
+    "First-week guarantee: if I can't get your first agent, scraper, or pipeline running within seven days, that month is on me.",
 };
 
 export type Step = { n: string; title: string; body: string };

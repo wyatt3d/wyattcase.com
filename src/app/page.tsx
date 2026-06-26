@@ -37,10 +37,11 @@ export default function Home() {
 
         <Reveal delay={120}>
           <p className="mt-7 max-w-2xl text-balance text-lg font-light leading-relaxed text-white/75 sm:text-xl">
-            I&apos;m Wyatt Case — an engineer and founder who builds AI knowledge
-            bases, autonomous agents, and the full-stack products around them. I
-            ship production software fast, and I run my own compute cluster so I
-            can hand you systems that keep working after launch.
+            I&apos;m Wyatt Case. I build the AI systems most teams write off as
+            too ambitious — knowledge bases, autonomous agents, and the
+            full-stack products around them — and I ship them in days, not
+            quarters. I run my own compute cluster, so what I hand you keeps
+            working long after launch.
           </p>
         </Reveal>
 
@@ -161,10 +162,11 @@ export default function Home() {
             </h2>
             <p className="mx-auto mt-5 max-w-2xl text-[15px] font-light leading-relaxed text-white/70">
               A dedicated Apple Silicon Mac mini, set up as your private
-              automation engine and running 24/7. I build and maintain the
-              agents, scrapers, and pipelines on it — and add any new tool you
-              want, whenever you think of it. No cloud bills, no cold starts, no
-              per-token surprises. One flat monthly price.
+              automation engine and running 24/7 — building agents, scrapers,
+              and pipelines that earn their keep while you sleep. I&apos;m wired
+              into it over secure Tailscale, so when you need a change or
+              something breaks, I&apos;m on it within 24 hours — no ticket queue,
+              no cloud bills, no per-token surprises. One flat monthly price.
             </p>
           </Reveal>
 
@@ -179,7 +181,7 @@ export default function Home() {
                 <div>
                   <div className="text-lg font-medium text-white">Your own dedicated machine</div>
                   <div className="mt-1 text-[13px] font-light text-white/55">
-                    Reserved hardware + me, building whatever you need on it.
+                    Reserved hardware, plus me on call to build and fix whatever you need.
                   </div>
                 </div>
                 <div className="flex items-baseline gap-1">
@@ -195,6 +197,10 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
+              <div className="mx-7 mb-7 flex items-start gap-2.5 rounded-2xl border border-amber-300/20 bg-amber-300/[0.06] px-4 py-3.5 text-[13px] font-light leading-relaxed text-amber-100/90">
+                <span className="mt-0.5 shrink-0">🛡️</span>
+                <span>{dedicatedMachine.guarantee}</span>
+              </div>
               <div className="px-7 pb-7">
                 <a
                   href={`mailto:${site.email}?subject=Dedicated%20Machine%20(%241%2C500%2Fmo)`}
