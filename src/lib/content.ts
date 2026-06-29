@@ -242,7 +242,7 @@ export const caseStudies: CaseStudy[] = [
 export const dedicatedMachine = {
   // Core offer — a fixed-scope build you OWN outright, not a subscription.
   name: "The 90-Day Own-Your-AI Build",
-  price: "$4,500",
+  price: "$5,000",
   cadence: "one-time · paid in 3 milestones, never monthly",
   headline: "Own the machine. Own the code. Pay once.",
   intro:
@@ -260,19 +260,20 @@ export const dedicatedMachine = {
   ],
   // The value stack — what you walk away owning.
   valueStack: [
-    "A Mac configured for your business — yours to keep, it never goes back",
     "A done-for-you automation build, custom to your workflow — not a template",
+    "Your dedicated Mac configured end to end — you own it, sourced at cost with no markup",
     "The complete codebase, documented in plain English so any developer can maintain it",
     "A walkthrough video of every automation: what it does and how to tweak it",
     "A roadmap of the next highest-leverage things in your business worth automating",
-    "30 days of post-handoff support included — I remote in over Tailscale and fix anything, free",
+    "A business-specific prompt & template library, tuned to your operation",
+    "30 days of post-handoff support included — I remote in over Tailscale, free",
     "Zero lock-in by design: export everything, no clawback, no kill switch",
   ],
   milestones: [
     {
       n: "01",
-      title: "Kickoff — $1,500",
-      body: "Locks your build slot and funds the machine. I order and configure the hardware for your operation.",
+      title: "Kickoff — $2,000",
+      body: "Locks your build slot. We scope the highest-leverage automations and I architect the system. Your Mac is ordered at cost, or bring your own.",
     },
     {
       n: "02",
@@ -291,7 +292,7 @@ export const dedicatedMachine = {
   ownership:
     "You own it. If you ever walk, you keep the Mac and the code — no clawback, no kill switch, no holding your business hostage.",
   costNote:
-    "The only ongoing cost is metered AI usage, paid directly to the model provider at cost — no markup, you set the cap, you can shut it off. That's pay-as-you-go, not a subscription.",
+    "Two things sit outside the build fee, both at cost with no markup: the Mac itself (yours to keep — I source and configure it, or bring your own) and metered AI usage paid straight to the model provider, with a cap you control. Neither is a subscription.",
   // Premium anchor tier.
   premium: {
     name: "The On-Prem AI Vault",

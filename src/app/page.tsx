@@ -209,7 +209,7 @@ export default function Home() {
                   </div>
                   <div className="mt-1 text-lg font-medium text-white">{dedicatedMachine.name}</div>
                   <div className="mt-1 text-[13px] font-light text-white/55">
-                    A done-for-you AI system on a Mac mini you own outright.
+                    A done-for-you AI system on a Mac you own outright — hardware billed separately, at cost.
                   </div>
                 </div>
                 <div className="flex flex-col items-start sm:items-end">
@@ -250,7 +250,7 @@ export default function Home() {
 
               <div className="px-7 pb-7 pt-5">
                 <a
-                  href={`mailto:${site.email}?subject=The%2090-Day%20Own-Your-AI%20Build%20(%244%2C500)`}
+                  href={`mailto:${site.email}?subject=The%2090-Day%20Own-Your-AI%20Build%20(%245%2C000)`}
                   className="inline-flex w-full items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-medium text-black transition-transform hover:-translate-y-0.5 sm:w-auto"
                 >
                   Book a fit call →
