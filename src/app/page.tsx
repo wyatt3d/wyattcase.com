@@ -37,29 +37,27 @@ export default function Home() {
 
         <Reveal delay={120}>
           <p className="mt-7 max-w-2xl text-balance text-lg font-light leading-relaxed text-white/75 sm:text-xl">
-            I&apos;m Wyatt Case. I build the AI systems most teams write off as
-            too ambitious — knowledge bases, autonomous agents, and the
-            full-stack products around them — and I ship them in days, not
-            quarters. I run my own compute cluster, so what I hand you keeps
-            working long after launch.
+            I&apos;m Wyatt Case. I build the AI automation that runs your
+            business — agents, knowledge bases, scrapers, the works — and
+            install it on a machine you own outright. The hardware and the
+            code are yours to keep. You pay once, and you never rent your
+            operations back from a software vendor again.
           </p>
         </Reveal>
 
         <Reveal delay={180}>
           <div className="mt-10 flex flex-wrap items-center gap-3">
             <Link
-              href="#work"
+              href="#dedicated"
               className="rounded-full bg-white px-6 py-3 text-sm font-medium text-black transition-transform hover:-translate-y-0.5"
             >
-              View selected work
+              Own your AI →
             </Link>
             <Link
-              href={site.upwork}
-              target="_blank"
-              rel="noreferrer"
+              href="#work"
               className="rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-medium text-white backdrop-blur-xl transition-colors hover:bg-white/15"
             >
-              Hire me on Upwork →
+              View selected work
             </Link>
           </div>
         </Reveal>
@@ -150,23 +148,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------- Dedicated machine offer ---------- */}
+      {/* ---------- Own-your-AI offer ---------- */}
       <section id="dedicated" className="scroll-mt-24 border-t border-white/10 bg-[#0a0a0c]/60 backdrop-blur-2xl">
         <div className="mx-auto max-w-6xl px-6 py-24 sm:px-10">
           <Reveal className="text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-amber-300/20 bg-amber-300/10 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-amber-200/90">
-              Dedicated Machine · {dedicatedMachine.price}{dedicatedMachine.cadence}
+              Own it · don&apos;t rent it
             </div>
             <h2 className="mx-auto mt-5 max-w-3xl text-balance text-3xl font-light tracking-tight text-white sm:text-4xl">
-              Rent a machine that works only for you.
+              {dedicatedMachine.headline}
             </h2>
             <p className="mx-auto mt-5 max-w-2xl text-[15px] font-light leading-relaxed text-white/70">
-              A dedicated Apple Silicon Mac mini, set up as your private
-              automation engine and running 24/7 — building agents, scrapers,
-              and pipelines that earn their keep while you sleep. I&apos;m wired
-              into it over secure Tailscale, so when you need a change or
-              something breaks, I&apos;m on it within 24 hours — no ticket queue,
-              no cloud bills, no per-token surprises. One flat monthly price.
+              {dedicatedMachine.intro}
             </p>
           </Reveal>
 
@@ -174,44 +167,118 @@ export default function Home() {
             <DedicatedMachine />
           </Reveal>
 
-          {/* Pricing card */}
+          {/* Premium anchor */}
           <Reveal delay={120} className="mt-14">
-            <div className="mx-auto max-w-2xl overflow-hidden rounded-3xl border border-white/12 bg-white/[0.04]">
-              <div className="flex flex-col items-baseline gap-2 border-b border-white/10 px-7 py-7 sm:flex-row sm:justify-between">
+            <div className="mx-auto max-w-2xl rounded-3xl border border-amber-300/20 bg-amber-300/[0.05] p-7">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
                 <div>
-                  <div className="text-lg font-medium text-white">Your own dedicated machine</div>
+                  <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-amber-200/80">
+                    Premium
+                  </div>
+                  <div className="mt-1 text-lg font-medium text-white">{dedicatedMachine.premium.name}</div>
+                </div>
+                <span className="text-3xl font-light text-white">{dedicatedMachine.premium.price}</span>
+              </div>
+              <p className="mt-3 text-[14px] font-light leading-relaxed text-white/65">
+                {dedicatedMachine.premium.intro}
+              </p>
+              <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+                {dedicatedMachine.premium.points.map((p) => (
+                  <li key={p} className="flex items-start gap-2 text-[13px] font-light leading-relaxed text-white/70">
+                    <span className="mt-0.5 text-amber-400">✓</span>
+                    {p}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={`mailto:${site.email}?subject=The%20On-Prem%20AI%20Vault%20(%2435K)`}
+                className="mt-5 inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/15"
+              >
+                Apply for the Vault build →
+              </a>
+            </div>
+          </Reveal>
+
+          {/* Core offer — the hero card */}
+          <Reveal delay={120} className="mt-8">
+            <div className="mx-auto max-w-2xl overflow-hidden rounded-3xl border border-white/12 bg-white/[0.04]">
+              <div className="flex flex-col items-baseline gap-3 border-b border-white/10 px-7 py-7 sm:flex-row sm:justify-between">
+                <div>
+                  <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-amber-200/80">
+                    Most operations start here
+                  </div>
+                  <div className="mt-1 text-lg font-medium text-white">{dedicatedMachine.name}</div>
                   <div className="mt-1 text-[13px] font-light text-white/55">
-                    Reserved hardware, plus me on call to build and fix whatever you need.
+                    A done-for-you AI system on a Mac mini you own outright.
                   </div>
                 </div>
-                <div className="flex items-baseline gap-1">
+                <div className="flex flex-col items-start sm:items-end">
                   <span className="text-4xl font-light text-white">{dedicatedMachine.price}</span>
-                  <span className="text-[13px] font-light text-white/55">{dedicatedMachine.cadence}</span>
+                  <span className="text-[12px] font-light text-white/55">{dedicatedMachine.cadence}</span>
                 </div>
               </div>
+
               <ul className="grid gap-3 px-7 py-7 sm:grid-cols-2">
-                {dedicatedMachine.included.map((item) => (
+                {dedicatedMachine.valueStack.map((item) => (
                   <li key={item} className="flex items-start gap-2.5 text-[14px] font-light leading-relaxed text-white/75">
                     <span className="mt-0.5 text-amber-400">✓</span>
                     {item}
                   </li>
                 ))}
               </ul>
-              <div className="mx-7 mb-7 flex items-start gap-2.5 rounded-2xl border border-amber-300/20 bg-amber-300/[0.06] px-4 py-3.5 text-[13px] font-light leading-relaxed text-amber-100/90">
-                <span className="mt-0.5 shrink-0">🛡️</span>
-                <span>{dedicatedMachine.guarantee}</span>
+
+              <div className="grid gap-px border-t border-white/10 bg-white/10 sm:grid-cols-3">
+                {dedicatedMachine.milestones.map((m) => (
+                  <div key={m.n} className="bg-[#0b0b0e]/85 px-5 py-5">
+                    <div className="font-mono text-sm text-amber-300/70">{m.n}</div>
+                    <div className="mt-2 text-[14px] font-medium text-white">{m.title}</div>
+                    <p className="mt-1.5 text-[12.5px] font-light leading-relaxed text-white/55">{m.body}</p>
+                  </div>
+                ))}
               </div>
-              <div className="px-7 pb-7">
+
+              <div className="space-y-2.5 px-7 pt-7">
+                <div className="flex items-start gap-2.5 rounded-2xl border border-amber-300/20 bg-amber-300/[0.06] px-4 py-3.5 text-[13px] font-light leading-relaxed text-amber-100/90">
+                  <span className="mt-0.5 shrink-0">🛡️</span>
+                  <span>{dedicatedMachine.guarantee}</span>
+                </div>
+                <div className="flex items-start gap-2.5 rounded-2xl border border-white/12 bg-white/[0.04] px-4 py-3.5 text-[13px] font-light leading-relaxed text-white/75">
+                  <span className="mt-0.5 shrink-0">🔓</span>
+                  <span>{dedicatedMachine.ownership}</span>
+                </div>
+              </div>
+
+              <div className="px-7 pb-7 pt-5">
                 <a
-                  href={`mailto:${site.email}?subject=Dedicated%20Machine%20(%241%2C500%2Fmo)`}
+                  href={`mailto:${site.email}?subject=The%2090-Day%20Own-Your-AI%20Build%20(%244%2C500)`}
                   className="inline-flex w-full items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-medium text-black transition-transform hover:-translate-y-0.5 sm:w-auto"
                 >
-                  Claim your machine →
+                  Book a fit call →
                 </a>
-                <p className="mt-3 text-[12px] font-light text-white/40">
-                  Tell me what you want it to do and I&apos;ll have it running for you, usually within a week.
-                </p>
+                <p className="mt-3 text-[12px] font-light text-white/40">{dedicatedMachine.costNote}</p>
               </div>
+            </div>
+          </Reveal>
+
+          {/* Support — a la carte */}
+          <Reveal delay={120} className="mt-8">
+            <div className="mx-auto max-w-2xl rounded-3xl border border-white/10 bg-white/[0.02] p-7">
+              <div className="text-sm font-medium text-white">Support — packs, not a leash</div>
+              <p className="mt-2 text-[13.5px] font-light leading-relaxed text-white/60">
+                {dedicatedMachine.support.intro}
+              </p>
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                {dedicatedMachine.support.options.map((o) => (
+                  <div key={o.label} className="rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4">
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-[14px] font-medium text-white">{o.label}</span>
+                      <span className="text-lg font-light text-white">{o.price}</span>
+                    </div>
+                    <p className="mt-1.5 text-[12.5px] font-light leading-relaxed text-white/55">{o.body}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-4 text-[12px] font-light text-white/40">{dedicatedMachine.support.note}</p>
             </div>
           </Reveal>
         </div>

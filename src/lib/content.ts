@@ -5,7 +5,7 @@ export const site = {
   role: "AI Systems Engineer & Full-Stack Builder",
   // One-line positioning used in hero + metadata.
   tagline:
-    "I design and build AI systems that run themselves — knowledge bases, autonomous agents, and the full-stack products around them.",
+    "I build AI automation onto a machine you own outright — the hardware and the code, yours to keep. Pay once, never a subscription.",
   location: "Bay Area, California",
   email: "wyattdcase@gmail.com",
   github: "https://github.com/wyattcase",
@@ -240,8 +240,13 @@ export const caseStudies: CaseStudy[] = [
 ];
 
 export const dedicatedMachine = {
-  price: "$1,500",
-  cadence: "/ month",
+  // Core offer — a fixed-scope build you OWN outright, not a subscription.
+  name: "The 90-Day Own-Your-AI Build",
+  price: "$4,500",
+  cadence: "one-time · paid in 3 milestones, never monthly",
+  headline: "Own the machine. Own the code. Pay once.",
+  intro:
+    "I build your business's AI automation onto a Mac that's yours to keep — set up, dialed in, and running 24/7. The hardware and the code are yours outright. No monthly fee, no platform lock-in, no renting your own operations back from a vendor who can change the deal whenever they want.",
   // Capabilities radiating from the machine in the showcase graphic. Keep labels short.
   capabilities: [
     { icon: "📚", label: "Self-updating knowledge bases" },
@@ -253,18 +258,64 @@ export const dedicatedMachine = {
     { icon: "🔒", label: "Secure Tailscale remote support" },
     { icon: "⚡", label: "Always-on, 24/7" },
   ],
-  included: [
-    "A Mac mini reserved 100% for you, humming 24/7 — no shared cloud, no cold starts, no per-token meter",
-    "I build your first agent, scraper, or pipeline myself — you go live, you don't go learning",
-    "Any new tool or workflow you dream up — added on request, no change orders",
-    "Secure Tailscale access into your machine — I jump on in seconds, no screen-share scheduling, no IT tickets",
-    "24-hour support, guaranteed — message me and you hear back within one business day, every time",
-    "A direct line to me — no ticket queue, no offshore tier-1",
-    "Month-to-month. Cancel anytime. Keep everything I built for you.",
+  // The value stack — what you walk away owning.
+  valueStack: [
+    "A Mac configured for your business — yours to keep, it never goes back",
+    "A done-for-you automation build, custom to your workflow — not a template",
+    "The complete codebase, documented in plain English so any developer can maintain it",
+    "A walkthrough video of every automation: what it does and how to tweak it",
+    "A roadmap of the next highest-leverage things in your business worth automating",
+    "30 days of post-handoff support included — I remote in over Tailscale and fix anything, free",
+    "Zero lock-in by design: export everything, no clawback, no kill switch",
   ],
-  // Risk reversal shown beneath the included list.
+  milestones: [
+    {
+      n: "01",
+      title: "Kickoff — $1,500",
+      body: "Locks your build slot and funds the machine. I order and configure the hardware for your operation.",
+    },
+    {
+      n: "02",
+      title: "Go-live — $1,500",
+      body: "Your first automation is live and earning its keep — usually inside 14 days. You don't pay this until you've watched it work.",
+    },
+    {
+      n: "03",
+      title: "Handoff — $1,500",
+      body: "Fully dialed in. I hand you the machine and the documented code and walk you through all of it. After this you owe nothing — ever.",
+    },
+  ],
+  // Risk reversal — the guarantee IS the positioning.
   guarantee:
-    "First-week guarantee: if I can't get your first agent, scraper, or pipeline running within seven days, that month is on me.",
+    "Work-until-it-works: if your system isn't live and doing the job we agreed on by the end of the 90 days, I keep building — at no extra cost — until it is.",
+  ownership:
+    "You own it. If you ever walk, you keep the Mac and the code — no clawback, no kill switch, no holding your business hostage.",
+  costNote:
+    "The only ongoing cost is metered AI usage, paid directly to the model provider at cost — no markup, you set the cap, you can shut it off. That's pay-as-you-go, not a subscription.",
+  // Premium anchor tier.
+  premium: {
+    name: "The On-Prem AI Vault",
+    price: "$35,000",
+    cadence: "one-time · your private AI supercomputer",
+    intro:
+      "For operations whose data can't live on someone else's cloud — legal, medical, finance, IP-heavy, or just privacy-serious. A top-spec Mac Studio with up to 512GB of unified memory, configured to run large AI models fully on-premise. Nothing leaves your building. No cloud bills, no usage meters — a private, client-owned AI server that's yours forever.",
+    points: [
+      "Everything in the Build, on frontier-grade local hardware",
+      "Large models running fully local — total data sovereignty",
+      "Zero cloud inference bills; pays for itself against heavy cloud spend",
+      "Privacy & security configuration, plus priority support",
+    ],
+  },
+  // Support — a la carte, never a subscription.
+  support: {
+    intro:
+      "When the build is done, you don't need me. But if you want changes, new automations, or a hand when something breaks, support is there — bought in blocks, never billed monthly.",
+    options: [
+      { label: "Per-incident", price: "$150", body: "Pay only when something needs fixing." },
+      { label: "Support Pack", price: "$500", body: "A prepaid block of help, good for a year. Top up anytime." },
+    ],
+    note: "Support is a service you choose, not a meter that runs whether you use it or not. No monthly bill, no auto-renew. That's the whole point.",
+  },
 };
 
 export type Step = { n: string; title: string; body: string };
