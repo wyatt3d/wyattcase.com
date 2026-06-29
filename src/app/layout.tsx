@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ShaderBackground } from "@/components/ShaderBackground";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { site } from "@/lib/content";
@@ -68,9 +67,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} overflow-x-hidden text-white antialiased`}
       >
-        <ShaderBackground />
-        {/* Darkening scrim so layered content stays legible over the shader. */}
-        <div className="pointer-events-none fixed inset-0 -z-10 bg-gradient-to-b from-black/30 via-black/55 to-black/80" />
+        {/* Static, lightweight background — cool-to-warm depth echoing the brand, zero runtime cost. */}
+        <div
+          aria-hidden
+          className="pointer-events-none fixed inset-0 -z-10"
+          style={{
+            background:
+              "radial-gradient(55rem 55rem at 88% -8%, rgba(245,169,60,0.10), transparent 60%), radial-gradient(50rem 50rem at -6% 2%, rgba(70,120,150,0.10), transparent 55%), radial-gradient(42rem 42rem at 50% 112%, rgba(245,169,60,0.05), transparent 60%), #0a0a0c",
+          }}
+        />
         <Nav />
         {children}
         <Footer />
