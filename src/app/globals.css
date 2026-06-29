@@ -29,30 +29,7 @@ body {
   color: white;
 }
 
-/* Dedicated-machine showcase: flowing connectors + pulsing core glow. */
-@keyframes wc-dash {
-  to {
-    stroke-dashoffset: -8;
-  }
-}
-@keyframes wc-pulse {
-  0%,
-  100% {
-    opacity: 0.4;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.06);
-  }
-}
-.wc-flow {
-  stroke-dasharray: 1.5 4;
-  animation: wc-dash 1.1s linear infinite;
-}
-.wc-glow {
-  animation: wc-pulse 5s ease-in-out infinite;
-}
+/* (decorative shader/diagram animations removed for performance) */
 
 @media (prefers-reduced-motion: reduce) {
   *,

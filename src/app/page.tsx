@@ -18,7 +18,7 @@ export default function Home() {
       <section className="mx-auto flex min-h-svh max-w-6xl flex-col justify-center px-6 pb-24 pt-32 sm:px-10">
         <Reveal>
           {site.available ? (
-            <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-[12px] font-light text-white/70 backdrop-blur-xl">
+            <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-[12px] font-light text-white/70">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/70" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
@@ -55,7 +55,7 @@ export default function Home() {
             </Link>
             <Link
               href="#work"
-              className="rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-medium text-white backdrop-blur-xl transition-colors hover:bg-white/15"
+              className="rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/15"
             >
               View selected work
             </Link>
@@ -74,7 +74,7 @@ export default function Home() {
       </section>
 
       {/* ---------- Selected work ---------- */}
-      <section id="work" className="scroll-mt-24 border-t border-white/10 bg-[#0a0a0c]/55 backdrop-blur-2xl">
+      <section id="work" className="scroll-mt-24 border-t border-white/10 bg-[#0a0a0c]/55">
         <div className="mx-auto max-w-6xl px-6 py-24 sm:px-10">
           <Reveal>
             <Eyebrow>Selected work</Eyebrow>
@@ -149,7 +149,7 @@ export default function Home() {
       </section>
 
       {/* ---------- Own-your-AI offer ---------- */}
-      <section id="dedicated" className="scroll-mt-24 border-t border-white/10 bg-[#0a0a0c]/60 backdrop-blur-2xl">
+      <section id="dedicated" className="scroll-mt-24 border-t border-white/10 bg-[#0a0a0c]/60">
         <div className="mx-auto max-w-6xl px-6 py-24 sm:px-10">
           <Reveal className="text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-amber-300/20 bg-amber-300/10 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-amber-200/90">
@@ -310,7 +310,7 @@ export default function Home() {
       </section>
 
       {/* ---------- About ---------- */}
-      <section id="about" className="scroll-mt-24 border-t border-white/10 bg-[#0a0a0c]/55 backdrop-blur-2xl">
+      <section id="about" className="scroll-mt-24 border-t border-white/10 bg-[#0a0a0c]/55">
         <div className="mx-auto max-w-3xl px-6 py-24 sm:px-10">
           <Reveal>
             <Eyebrow>About</Eyebrow>
@@ -359,7 +359,7 @@ export default function Home() {
               </Link>
               <a
                 href={`mailto:${site.email}`}
-                className="rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-medium text-white backdrop-blur-xl transition-colors hover:bg-white/15"
+                className="rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/15"
               >
                 Email me directly
               </a>

@@ -35,7 +35,7 @@ export function Nav() {
           href={site.upwork}
           target="_blank"
           rel="noreferrer"
-          className="rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-[13px] font-medium text-white backdrop-blur-xl transition-colors hover:bg-white/20"
+          className="rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-[13px] font-medium text-white transition-colors hover:bg-white/20"
         >
           Hire me
         </Link>
