@@ -4,7 +4,7 @@ import { site } from "@/lib/content";
 const links = [
   { label: "Work", href: "/#work" },
   { label: "Services", href: "/#services" },
-  { label: "Dedicated Machine", href: "/#dedicated" },
+  { label: "Own Your AI", href: "/#dedicated" },
   { label: "About", href: "/#about" },
 ];
 

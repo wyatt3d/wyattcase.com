@@ -19,12 +19,12 @@ const geistMono = Geist_Mono({
 });
 
 const description =
-  "Wyatt Case designs and builds AI systems and full-stack products — AI knowledge bases, autonomous agents, web scraping pipelines, and Next.js/Supabase apps. Available for select projects.";
+  "Wyatt Case builds your business's AI automation onto a Mac you own outright — the machine and the code, yours to keep. Pay once, no subscription. Done-for-you agents, knowledge bases, web scraping, and full-stack Next.js/Supabase builds.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://wyattcase.com"),
   title: {
-    default: "Wyatt Case — AI Systems Engineer & Full-Stack Builder",
+    default: "Wyatt Case — AI Automation You Own",
     template: "%s — Wyatt Case",
   },
   description,
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Wyatt Case" }],
   openGraph: {
-    title: "Wyatt Case — AI Systems Engineer & Full-Stack Builder",
+    title: "Wyatt Case — AI Automation You Own",
     description,
     url: "https://wyattcase.com",
     siteName: "Wyatt Case",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Wyatt Case — AI Systems Engineer & Full-Stack Builder",
+    title: "Wyatt Case — AI Automation You Own",
     description,
     creator: "@wyattdcase",
   },
