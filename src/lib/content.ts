@@ -23,10 +23,10 @@ export type Service = {
 
 export const services: Service[] = [
   {
-    title: "AI Knowledge Bases & RAG",
+    title: "LLM Wikis & Knowledge Bases",
     blurb:
-      "Your scattered docs, PDFs, and tribal knowledge become one searchable brain that answers with citations — so your team stops re-asking the same questions and your AI stops making things up.",
-    points: ["Document ingestion & chunking", "Cited, hallucination-resistant answers", "Self-updating content pipelines"],
+      "I turn your scattered docs and tribal knowledge into a structured markdown wiki your AI reads directly — cheaper than a vector/RAG stack, more accurate than chunk-and-pray retrieval, and kept current by a recursive agent that researches, cites its sources, critiques its own gaps, and improves itself on a schedule.",
+    points: ["Markdown wikis as LLM context — no vector bill", "Cited, hallucination-resistant answers", "Recursive self-improvement loops keep it fresh"],
   },
   {
     title: "Autonomous & Agentic Systems",

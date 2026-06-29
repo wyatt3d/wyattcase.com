@@ -64,7 +64,7 @@ export default function Home() {
 
         <Reveal delay={240}>
           <div className="mt-14 flex flex-wrap gap-x-8 gap-y-3 font-mono text-[11px] uppercase tracking-[0.18em] text-white/45">
-            <span>AI Knowledge Bases</span>
+            <span>LLM Wikis</span>
             <span>Agentic Automation</span>
             <span>Web Scraping</span>
             <span>Next.js + Supabase</span>
