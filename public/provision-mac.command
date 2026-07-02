@@ -15,15 +15,20 @@ echo "Enrolls THIS Mac into admin.wyattcase.com:"
 echo "  Tailscale + health reporting + in-browser remote desktop."
 echo ""
 
+ENROLL_URL="https://afjciwijknfdlrnbgzjh.supabase.co/functions/v1/enroll"
 DEVICE_TOKEN="${DEVICE_TOKEN:-}"
-TAILSCALE_AUTHKEY="${TAILSCALE_AUTHKEY:-}"
 VNC_PASSWORD="${VNC_PASSWORD:-}"
 [ -z "$DEVICE_TOKEN" ] && { printf "Device token (admin -> Fleet -> Add device): "; read -r DEVICE_TOKEN; }
-[ -z "$TAILSCALE_AUTHKEY" ] && { printf "Tailscale auth key (Tailscale admin -> Settings -> Keys): "; read -r TAILSCALE_AUTHKEY; }
 [ -z "$VNC_PASSWORD" ] && { printf "Choose a Screen Sharing (VNC) password: "; read -rs VNC_PASSWORD; echo; }
-if [ -z "$DEVICE_TOKEN" ] || [ -z "$TAILSCALE_AUTHKEY" ]; then
-  echo "ERROR: device token and Tailscale key are both required."; exit 1
+if [ -z "$DEVICE_TOKEN" ]; then echo "ERROR: device token is required."; exit 1; fi
+
+echo ""
+echo "==> Enrolling with admin.wyattcase.com ..."
+TAILSCALE_AUTHKEY="$(curl -fsS -X POST "$ENROLL_URL" -H "content-type: application/json" -d "{\"device_token\":\"$DEVICE_TOKEN\"}" | /usr/bin/python3 -c 'import sys,json;print(json.load(sys.stdin).get("tailscale_authkey",""))' 2>/dev/null || echo "")"
+if [ -z "$TAILSCALE_AUTHKEY" ]; then
+  echo "ERROR: enrollment failed. Check the device token is correct and the device was added in admin -> Fleet."; exit 1
 fi
+echo "    Enrolled. Provisioning this Mac ..."
 
 echo ""
 echo "==> [1/6] Installing Homebrew + tooling (may prompt for your Mac password)"

@@ -8,8 +8,7 @@ export const metadata: Metadata = {
 
 const steps = [
   "In admin → Fleet → Add device, then copy the device token it shows (once).",
-  "Generate a Tailscale auth key (Tailscale admin → Settings → Keys).",
-  "On the Mac, run the downloaded file (right-click → Open the first time). Paste the token + key and set a Screen Sharing password.",
+  "On the Mac, run the downloaded file (right-click → Open the first time). Paste the token and set a Screen Sharing password — it enrolls itself and joins Tailscale automatically.",
   "The Mac appears in admin → Fleet within ~60s. Use “Open remote desktop” to control it in-browser.",
 ];
 
