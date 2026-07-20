@@ -122,7 +122,10 @@ fi
 # join the tailnet, retrying transient failures and capturing the real error
 TS_JOINED=""; TS_ERR=""
 for attempt in 1 2 3; do
-  TS_ERR="$(sudo "$TS_BIN" up --authkey "$AUTHKEY" --ssh --accept-routes 2>&1)" && { TS_JOINED=1; break; }
+  # NOTE: no --ssh — Tailscale SSH would intercept port 22 and force an
+  # interactive browser re-auth, breaking the hub's key-based fleet access.
+  # We use the regular macOS SSH server + the hub's fleet key instead.
+  TS_ERR="$(sudo "$TS_BIN" up --authkey "$AUTHKEY" --accept-routes 2>&1)" && { TS_JOINED=1; break; }
   echo "   join attempt $attempt failed, retrying…"; sleep 4
 done
 if [ -z "$TS_JOINED" ]; then
