@@ -108,10 +108,29 @@ security add-generic-password -U -s wyattcase-device-token -a admin -w "$DEVICE_
 
 # --------------------------------------------------------------------------
 say 5 "Joining Tailscale"
-sudo "$TS_BIN" up --authkey "$AUTHKEY" --ssh --accept-routes 2>/dev/null \
-  || warn "'tailscale up' failed — check internet, then re-run."
+# Homebrew installs the tailscale CLI only — the tailscaled *system daemon*
+# must be installed and running before `tailscale up` can connect. (This was
+# the missing piece that made joins fail.)
+TSD_BIN="$(command -v tailscaled || echo "$BREW_PREFIX/bin/tailscaled")"
+if ! sudo "$TS_BIN" status >/dev/null 2>&1; then
+  echo "   starting Tailscale background service…"
+  sudo "$TSD_BIN" install-system-daemon >/dev/null 2>&1 \
+    || warn "could not install the tailscaled system daemon"
+  # wait (up to ~20s) for the daemon socket to accept commands
+  for _ in $(seq 1 20); do sudo "$TS_BIN" status >/dev/null 2>&1 && break; sleep 1; done
+fi
+# join the tailnet, retrying transient failures and capturing the real error
+TS_JOINED=""; TS_ERR=""
+for attempt in 1 2 3; do
+  TS_ERR="$(sudo "$TS_BIN" up --authkey "$AUTHKEY" --ssh --accept-routes 2>&1)" && { TS_JOINED=1; break; }
+  echo "   join attempt $attempt failed, retrying…"; sleep 4
+done
+if [ -z "$TS_JOINED" ]; then
+  warn "Tailscale join failed after 3 tries. Reason: ${TS_ERR:-unknown}"
+  warn "The Mac is enrolled and reporting health, but the hub can't reach it until this succeeds."
+fi
 sleep 2
-FQDN="$("$TS_BIN" status --json 2>/dev/null | grep -o '"DNSName":"[^"]*"' | head -1 | sed 's/.*"DNSName":"//; s/"//; s/\.$//')"
+FQDN="$(sudo "$TS_BIN" status --json 2>/dev/null | grep -o '"DNSName":"[^"]*"' | head -1 | sed 's/.*"DNSName":"//; s/"//; s/\.$//')"
 
 # --------------------------------------------------------------------------
 say 6 "Allowing the hub to reach this Mac (SSH + Claude session)"
@@ -145,6 +164,11 @@ bash "$WC_DIR/claude-session.sh" 2>/dev/null || true
 
 # --------------------------------------------------------------------------
 say 7 "Turning on remote desktop (Screen Sharing + secure browser bridge)"
+# Explicitly enable the built-in Screen Sharing service (kickstart alone does
+# not always flip it on modern macOS), then set the VNC password via ARD.
+sudo launchctl enable system/com.apple.screensharing 2>/dev/null || true
+sudo launchctl bootstrap system /System/Library/LaunchDaemons/com.apple.screensharing.plist 2>/dev/null \
+  || sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.screensharing.plist 2>/dev/null || true
 sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
   -activate -configure -access -on -clientopts -setvnclegacy -vnclegacy yes \
   -setvncpw -vncpw "$VNC_PASSWORD" -restart -agent -privs -all 2>/dev/null \
