@@ -181,16 +181,21 @@ launchctl load "$LA_DIR/com.wyattcase.claude-session.plist" 2>/dev/null || true
 bash "$WC_DIR/claude-session.sh" 2>/dev/null || true
 
 # --------------------------------------------------------------------------
-say 7 "Turning on remote desktop (Screen Sharing + secure browser bridge)"
-# Use ONE method only — Remote Management via kickstart, which sets the VNC
-# password legacy clients (incl. macOS Screen Sharing.app) use. Do NOT also
-# enable com.apple.screensharing: the two conflict and produce a
-# "Screen Sharing is not permitted" error on connect.
-sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
-  -activate -configure -access -on -users "$OS_USER" -privs -all \
-  -clientopts -setvnclegacy -vnclegacy yes -setvncpw -vncpw "$VNC_PASSWORD" \
-  -restart -agent 2>/dev/null \
-  || warn "enable System Settings -> General -> Sharing -> Screen Sharing if remote desktop is blank."
+say 7 "Turning on Screen Sharing (remote desktop)"
+# Enable the built-in Screen Sharing service. It authenticates with THIS Mac's
+# own login account (no separate VNC password to juggle) and — unlike Remote
+# Management (kickstart) — leaves the System Settings toggle under your
+# control instead of greying it out.
+sudo launchctl enable system/com.apple.screensharing 2>/dev/null || true
+sudo launchctl bootstrap system /System/Library/LaunchDaemons/com.apple.screensharing.plist 2>/dev/null \
+  || sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.screensharing.plist 2>/dev/null || true
+sleep 1
+SCREENSHARE="on"
+if ! nc -z -G 3 127.0.0.1 5900 >/dev/null 2>&1; then
+  SCREENSHARE="needs 1 click"
+  warn "macOS didn't let the script flip Screen Sharing on automatically."
+  warn "Turn it on once: System Settings -> General -> Sharing -> Screen Sharing (ON)."
+fi
 brew_install websockify
 WS_BIN="$(command -v websockify || echo "")"
 BRIDGE="not started"
@@ -249,11 +254,13 @@ echo "  Done — this Mac is now on your fleet"
 echo "==============================================="
 echo "  Tailscale name : ${FQDN:-<check 'tailscale status'>}"
 echo "  Health report  : $([ "${HB_OK:-1}" = "0" ] && echo "sent OK" || echo "FAILED (see /tmp/wyattcase-heartbeat.err)")"
-echo "  Remote desktop : $BRIDGE"
+echo "  Screen Sharing : $SCREENSHARE  (connect with this Mac's login)"
 echo "  Claude session : tmux 'claude' (hub can attach + voice-dispatch)"
 echo ""
 echo "It should appear GREEN in admin.wyattcase.com -> Fleet within ~60s,"
 echo "and in the hub's desktop Fleet widget as a talk-to target."
 echo ""
-echo "One thing left to do over remote desktop: open Terminal on this Mac,"
-echo "run 'claude', and sign in once so it can do work."
+echo "Two quick things to finish, from the hub over Screen Sharing:"
+[ "$SCREENSHARE" = "needs 1 click" ] && echo "  0. Flip Screen Sharing ON: System Settings -> General -> Sharing."
+echo "  1. Open Terminal here and run:  tmux attach -t claude"
+echo "  2. Pick login option 1 and sign into Claude once. Done."
