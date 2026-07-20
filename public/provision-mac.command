@@ -99,6 +99,11 @@ RESP="$(curl -fsS -X POST "$ENROLL_URL" -H 'content-type: application/json' -d "
 AUTHKEY="$(printf '%s' "$RESP" | sed -n 's/.*"tailscale_authkey":"\([^"]*\)".*/\1/p')"
 HEARTBEAT_URL="$(printf '%s' "$RESP" | sed -n 's/.*"heartbeat_url":"\([^"]*\)".*/\1/p')"
 [ -z "$HEARTBEAT_URL" ] && HEARTBEAT_URL="$HEARTBEAT_FALLBACK"
+# the admin-assigned name for this device (so it shows up as e.g. mac-mini-02,
+# not a random Tailscale name) and this Mac's login user (so the hub knows
+# who to SSH in as — no manual whoami)
+DEV_HOSTNAME="$(printf '%s' "$RESP" | sed -n 's/.*"hostname":"\([^"]*\)".*/\1/p')"
+OS_USER="$(whoami)"
 if [ -z "$AUTHKEY" ]; then
   echo "ERROR: enrollment failed. Server said: ${RESP:-<no response>}"
   echo "Re-download the installer from admin -> Fleet (the token may have been used)."
@@ -132,6 +137,14 @@ if [ -z "$TS_JOINED" ]; then
   warn "Tailscale join failed after 3 tries. Reason: ${TS_ERR:-unknown}"
   warn "The Mac is enrolled and reporting health, but the hub can't reach it until this succeeds."
 fi
+# name this Mac (and its Tailscale entry) after the admin device name, so it's
+# identifiable in the tailnet + Fleet widget instead of a random hex name.
+if [ -n "$DEV_HOSTNAME" ]; then
+  sudo scutil --set ComputerName "$DEV_HOSTNAME" 2>/dev/null || true
+  sudo scutil --set HostName "$DEV_HOSTNAME" 2>/dev/null || true
+  sudo scutil --set LocalHostName "$DEV_HOSTNAME" 2>/dev/null || true
+  sudo "$TS_BIN" set --hostname "$DEV_HOSTNAME" 2>/dev/null || true
+fi
 sleep 2
 FQDN="$(sudo "$TS_BIN" status --json 2>/dev/null | grep -o '"DNSName":"[^"]*"' | head -1 | sed 's/.*"DNSName":"//; s/"//; s/\.$//')"
 
@@ -147,7 +160,9 @@ sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist 2>/dev/null || tr
 cat > "$WC_DIR/claude-session.sh" <<CS
 #!/bin/bash
 export PATH="$BREW_PREFIX/bin:/usr/local/bin:\$HOME/.local/bin:\$PATH"
-tmux has-session -t claude 2>/dev/null || tmux new-session -d -s claude "exec $CLAUDE_BIN"
+# headless fleet node: launch Claude with permission prompts skipped so
+# voice-dispatched commands from the hub never stall waiting for a click.
+tmux has-session -t claude 2>/dev/null || tmux new-session -d -s claude "exec $CLAUDE_BIN --dangerously-skip-permissions"
 CS
 chmod +x "$WC_DIR/claude-session.sh"
 cat > "$LA_DIR/com.wyattcase.claude-session.plist" <<PL
@@ -209,7 +224,7 @@ DISK=\$(df -g / 2>/dev/null | awk 'NR==2{print \$4}')
 TS=false; "$TS_BIN" status >/dev/null 2>&1 && TS=true
 CA=false; ("$CLAUDE_BIN" --version >/dev/null 2>&1) && [ -f "\$HOME/.claude/.credentials.json" -o -f "\$HOME/.claude.json" ] && CA=true
 curl -fsS -X POST "$HEARTBEAT_URL" -H "x-device-token: \$TOKEN" -H "content-type: application/json" \\
-  -d "{\"disk_free_gb\": \${DISK:-null}, \"tailscale_online\": \$TS, \"claude_code_authed\": \$CA, \"agent_version\": \"2.0.0\"}" >/dev/null 2>&1
+  -d "{\"disk_free_gb\": \${DISK:-null}, \"tailscale_online\": \$TS, \"claude_code_authed\": \$CA, \"agent_version\": \"2.0.0\", \"os_user\": \"$OS_USER\"}" >/dev/null 2>&1
 HB
 chmod +x "$WC_DIR/heartbeat.sh"
 cat > "$LA_DIR/com.wyattcase.heartbeat.plist" <<PL
