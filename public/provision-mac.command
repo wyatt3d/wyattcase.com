@@ -182,14 +182,14 @@ bash "$WC_DIR/claude-session.sh" 2>/dev/null || true
 
 # --------------------------------------------------------------------------
 say 7 "Turning on remote desktop (Screen Sharing + secure browser bridge)"
-# Explicitly enable the built-in Screen Sharing service (kickstart alone does
-# not always flip it on modern macOS), then set the VNC password via ARD.
-sudo launchctl enable system/com.apple.screensharing 2>/dev/null || true
-sudo launchctl bootstrap system /System/Library/LaunchDaemons/com.apple.screensharing.plist 2>/dev/null \
-  || sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.screensharing.plist 2>/dev/null || true
+# Use ONE method only — Remote Management via kickstart, which sets the VNC
+# password legacy clients (incl. macOS Screen Sharing.app) use. Do NOT also
+# enable com.apple.screensharing: the two conflict and produce a
+# "Screen Sharing is not permitted" error on connect.
 sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
-  -activate -configure -access -on -clientopts -setvnclegacy -vnclegacy yes \
-  -setvncpw -vncpw "$VNC_PASSWORD" -restart -agent -privs -all 2>/dev/null \
+  -activate -configure -access -on -users "$OS_USER" -privs -all \
+  -clientopts -setvnclegacy -vnclegacy yes -setvncpw -vncpw "$VNC_PASSWORD" \
+  -restart -agent 2>/dev/null \
   || warn "enable System Settings -> General -> Sharing -> Screen Sharing if remote desktop is blank."
 brew_install websockify
 WS_BIN="$(command -v websockify || echo "")"
