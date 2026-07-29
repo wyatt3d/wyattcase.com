@@ -30,34 +30,43 @@ export default function Home() {
 
         <Reveal delay={60}>
           <h1 className="max-w-4xl text-balance text-[clamp(2.75rem,8vw,6.5rem)] font-light leading-[0.95] tracking-[-0.03em] text-white">
-            AI systems that
-            <br className="hidden sm:block" /> run themselves.
+            Have something
+            <br className="hidden sm:block" /> ambitious to build?
           </h1>
         </Reveal>
 
         <Reveal delay={120}>
           <p className="mt-7 max-w-2xl text-balance text-lg font-light leading-relaxed text-white/75 sm:text-xl">
-            I&apos;m Wyatt Case. I build the AI automation that runs your
-            business — agents, knowledge bases, scrapers, the works — and
-            install it on a machine you own outright. The hardware and the
-            code are yours to keep. You pay once, and you never rent your
-            operations back from a software vendor again.
+            Tell me the outcome you&apos;re after. I&apos;ll tell you whether I
+            can build it, how, and how fast. I&apos;m Wyatt Case — I build the
+            AI automation that runs your business and install it on a machine
+            you own outright. The hardware and the code are yours to keep. You
+            pay once, and you never rent your operations back from a software
+            vendor again.
           </p>
         </Reveal>
 
         <Reveal delay={180}>
           <div className="mt-10 flex flex-wrap items-center gap-3">
             <Link
-              href="#dedicated"
+              href={site.upwork}
+              target="_blank"
+              rel="noreferrer"
               className="rounded-full bg-white px-6 py-3 text-sm font-medium text-black transition-transform hover:-translate-y-0.5"
             >
-              Own your AI →
+              Hire me on Upwork →
+            </Link>
+            <Link
+              href="#dedicated"
+              className="rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/15"
+            >
+              Own your AI
             </Link>
             <Link
               href="#work"
               className="rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/15"
             >
-              View selected work
+              Selected work
             </Link>
           </div>
         </Reveal>
@@ -342,11 +351,11 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-6 py-28 text-center sm:px-10">
           <Reveal>
             <h2 className="mx-auto max-w-3xl text-balance text-4xl font-light leading-tight tracking-tight text-white sm:text-5xl">
-              Have something ambitious to build?
+              Ready when you are.
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-[15px] font-light leading-relaxed text-white/65">
-              Tell me the outcome you&apos;re after. I&apos;ll tell you whether I
-              can build it, how, and how fast.
+              One conversation. I&apos;ll tell you what I&apos;d build, what it
+              costs, and how fast you&apos;ll have it.
             </p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
               <Link
