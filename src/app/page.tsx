@@ -150,6 +150,16 @@ export default function Home() {
                       </li>
                     ))}
                   </ul>
+                  {s.link ? (
+                    <a
+                      href={s.link.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-4 inline-block text-[13px] font-medium text-amber-300/90 transition-colors hover:text-amber-200"
+                    >
+                      {s.link.label} →
+                    </a>
+                  ) : null}
                 </div>
               </Reveal>
             ))}

@@ -19,6 +19,7 @@ export type Service = {
   title: string;
   blurb: string;
   points: string[];
+  link?: { label: string; href: string };
 };
 
 export const services: Service[] = [
@@ -39,6 +40,9 @@ export const services: Service[] = [
     blurb:
       "The data you need, pulled at scale, cleaned, deduped, and delivered on schedule — from a one-off dataset to an always-on monitor that never forgets to run.",
     points: ["Resilient, anti-brittle scrapers", "Structured + deduped output", "Recurring delivery on cron"],
+    // Brand split: scraper.bot is the dedicated web-scraping product line;
+    // wyattcase.com stays the general AI-automation house.
+    link: { label: "Or own it as a product — scraper.bot", href: "https://scraper.bot" },
   },
   {
     title: "Full-Stack Product Builds",
