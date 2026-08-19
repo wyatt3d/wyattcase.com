@@ -184,6 +184,60 @@ cd "\$HOME" || exit 1
 tmux has-session -t claude 2>/dev/null || tmux new-session -d -s claude -c "\$HOME" "exec $CLAUDE_BIN --dangerously-skip-permissions"
 CS
 chmod +x "$WC_DIR/claude-session.sh"
+# Receiver the hub dispatches into (see comments inside).
+cat > "$WC_DIR/dispatch-recv.sh" <<'DR'
+#!/bin/bash
+# dispatch-recv — receives a hub-dispatched message on stdin and delivers it
+# into this Mac's tmux "claude" session.
+#
+# Two things the old one-line ssh delivery got wrong:
+#   1. A tmux session spawned straight from ssh runs with a LOCKED login
+#      keychain, so Claude comes up "Not logged in · run security
+#      unlock-keychain" even though credentials are on disk. Starting the
+#      session through its LaunchAgent in the GUI (Aqua) domain avoids that.
+#   2. A cold-started Claude swallows anything pasted before its prompt is
+#      drawn, so the first dispatch after a restart vanished silently.
+export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.local/bin:$PATH"
+MSG="$HOME/.wyattcase/.dispatch-msg"
+mkdir -p "$HOME/.wyattcase"
+cat > "$MSG"
+[ -s "$MSG" ] || exit 2
+
+started=0
+if ! tmux has-session -t claude 2>/dev/null; then
+  PL="$HOME/Library/LaunchAgents/com.wyattcase.claude-session.plist"
+  if [ -f "$PL" ]; then
+    launchctl kickstart -k "gui/$(id -u)/com.wyattcase.claude-session" >/dev/null 2>&1 \
+      || launchctl bootstrap "gui/$(id -u)" "$PL" >/dev/null 2>&1
+    for _ in $(seq 1 10); do tmux has-session -t claude 2>/dev/null && break; sleep 1; done
+  fi
+  tmux has-session -t claude 2>/dev/null \
+    || tmux new-session -d -s claude -c "$HOME" "exec claude --dangerously-skip-permissions" \
+    || exit 3
+  started=1
+fi
+
+if [ "$started" = 1 ]; then
+  for _ in $(seq 1 30); do
+    tmux capture-pane -p -t claude 2>/dev/null | grep -q "shift+tab\|for shortcuts\|bypass permissions" && break
+    sleep 1
+  done
+  sleep 2
+fi
+
+probe=$(head -c 24 "$MSG")
+for _ in 1 2 3; do
+  tmux load-buffer "$MSG" 2>/dev/null || exit 4
+  tmux paste-buffer -p -t claude 2>/dev/null || exit 5
+  sleep 0.3
+  tmux send-keys -t claude Enter 2>/dev/null || exit 6
+  sleep 2
+  tmux capture-pane -p -S -80 -t claude 2>/dev/null | grep -qF "$probe" && exit 0
+  sleep 4
+done
+exit 7
+DR
+chmod +x "$WC_DIR/dispatch-recv.sh"
 cat > "$LA_DIR/com.wyattcase.claude-session.plist" <<PL
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
