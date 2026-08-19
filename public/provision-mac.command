@@ -96,6 +96,12 @@ if ! command -v claude >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/claude" ]; th
 fi
 CLAUDE_BIN="$(command -v claude || echo "$HOME/.local/bin/claude")"
 case ":$PATH:" in *":$HOME/.local/bin:"*) : ;; *) echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.zshrc" ;; esac
+# NONINTERACTIVE=1 makes the Homebrew installer skip writing ~/.zprofile, so
+# brew (and tmux) are missing from login shells — `tmux attach -t claude` then
+# fails on an otherwise healthy node. Write the shellenv line ourselves.
+if ! grep -q 'brew shellenv' "$HOME/.zprofile" 2>/dev/null; then
+  echo "eval \"\$($BREW_PREFIX/bin/brew shellenv)\"" >> "$HOME/.zprofile"
+fi
 
 # --------------------------------------------------------------------------
 say 4 "Enrolling with admin.wyattcase.com"
