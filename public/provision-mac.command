@@ -46,7 +46,11 @@ if [ -z "$VNC_PASSWORD" ]; then
 fi
 
 # Keep the Mac awake so it stays reachable (best effort; needs admin).
-sudo -v 2>/dev/null || warn "no admin password entered — some steps may be skipped"
+# `sudo -v` forces re-authentication and fails even when sudo is already
+# usable (NOPASSWD / cached ticket), so probe with -n first.
+if ! sudo -n true 2>/dev/null; then
+  sudo -v 2>/dev/null || warn "no admin password entered — some steps may be skipped"
+fi
 sudo pmset -a sleep 0 disablesleep 1 2>/dev/null || true
 
 # --------------------------------------------------------------------------
@@ -124,28 +128,34 @@ if ! sudo "$TS_BIN" status >/dev/null 2>&1; then
   # wait (up to ~20s) for the daemon socket to accept commands
   for _ in $(seq 1 20); do sudo "$TS_BIN" status >/dev/null 2>&1 && break; sleep 1; done
 fi
+# Rename BEFORE joining: a fresh Mac is often "Wyatts-Mac-mini" like the hub,
+# and Tailscale would register the duplicate as <name>-1 and leave MagicDNS
+# ambiguous. Naming first means the tailnet entry is right on the first join.
+if [ -n "$DEV_HOSTNAME" ]; then
+  sudo scutil --set ComputerName "$DEV_HOSTNAME" 2>/dev/null || true
+  sudo scutil --set HostName "$DEV_HOSTNAME" 2>/dev/null || true
+  sudo scutil --set LocalHostName "$DEV_HOSTNAME" 2>/dev/null || true
+fi
 # join the tailnet, retrying transient failures and capturing the real error
 TS_JOINED=""; TS_ERR=""
 for attempt in 1 2 3; do
   # NOTE: no --ssh — Tailscale SSH would intercept port 22 and force an
   # interactive browser re-auth, breaking the hub's key-based fleet access.
   # We use the regular macOS SSH server + the hub's fleet key instead.
-  TS_ERR="$(sudo "$TS_BIN" up --authkey "$AUTHKEY" --accept-routes 2>&1)" && { TS_JOINED=1; break; }
+  TS_ERR="$(sudo "$TS_BIN" up --authkey "$AUTHKEY" --accept-routes ${DEV_HOSTNAME:+--hostname "$DEV_HOSTNAME"} 2>&1)" && { TS_JOINED=1; break; }
   echo "   join attempt $attempt failed, retrying…"; sleep 4
 done
 if [ -z "$TS_JOINED" ]; then
   warn "Tailscale join failed after 3 tries. Reason: ${TS_ERR:-unknown}"
   warn "The Mac is enrolled and reporting health, but the hub can't reach it until this succeeds."
 fi
-# name this Mac (and its Tailscale entry) after the admin device name, so it's
-# identifiable in the tailnet + Fleet widget instead of a random hex name.
-if [ -n "$DEV_HOSTNAME" ]; then
-  sudo scutil --set ComputerName "$DEV_HOSTNAME" 2>/dev/null || true
-  sudo scutil --set HostName "$DEV_HOSTNAME" 2>/dev/null || true
-  sudo scutil --set LocalHostName "$DEV_HOSTNAME" 2>/dev/null || true
-  sudo "$TS_BIN" set --hostname "$DEV_HOSTNAME" 2>/dev/null || true
-fi
+[ -n "$DEV_HOSTNAME" ] && sudo "$TS_BIN" set --hostname "$DEV_HOSTNAME" 2>/dev/null || true
 sleep 2
+# MagicDNS on macOS is nondeterministic about writing the resolver file; without
+# it, *.ts.net names don't resolve even though the tailnet is up.
+if [ ! -f /etc/resolver/tail436b5a.ts.net ] && [ -n "$TS_JOINED" ]; then
+  echo "nameserver 100.100.100.100" | sudo tee /etc/resolver/tail436b5a.ts.net >/dev/null 2>&1 || true
+fi
 FQDN="$(sudo "$TS_BIN" status --json 2>/dev/null | grep -o '"DNSName":"[^"]*"' | head -1 | sed 's/.*"DNSName":"//; s/"//; s/\.$//')"
 
 # --------------------------------------------------------------------------
@@ -160,9 +170,12 @@ sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist 2>/dev/null || tr
 cat > "$WC_DIR/claude-session.sh" <<CS
 #!/bin/bash
 export PATH="$BREW_PREFIX/bin:/usr/local/bin:\$HOME/.local/bin:\$PATH"
+# launchd starts agents in / — start the session in the home directory instead,
+# or Claude opens with / as its workspace (trust prompt, whole-disk blast radius).
+cd "\$HOME" || exit 1
 # headless fleet node: launch Claude with permission prompts skipped so
 # voice-dispatched commands from the hub never stall waiting for a click.
-tmux has-session -t claude 2>/dev/null || tmux new-session -d -s claude "exec $CLAUDE_BIN --dangerously-skip-permissions"
+tmux has-session -t claude 2>/dev/null || tmux new-session -d -s claude -c "\$HOME" "exec $CLAUDE_BIN --dangerously-skip-permissions"
 CS
 chmod +x "$WC_DIR/claude-session.sh"
 cat > "$LA_DIR/com.wyattcase.claude-session.plist" <<PL
@@ -171,6 +184,7 @@ cat > "$LA_DIR/com.wyattcase.claude-session.plist" <<PL
 <plist version="1.0"><dict>
   <key>Label</key><string>com.wyattcase.claude-session</string>
   <key>ProgramArguments</key><array><string>/bin/bash</string><string>$WC_DIR/claude-session.sh</string></array>
+  <key>WorkingDirectory</key><string>$HOME</string>
   <key>RunAtLoad</key><true/>
   <key>StartInterval</key><integer>120</integer>
   <key>StandardErrorPath</key><string>/tmp/wyattcase-claude-session.err</string>
@@ -196,8 +210,20 @@ if ! nc -z -G 3 127.0.0.1 5900 >/dev/null 2>&1; then
   warn "macOS didn't let the script flip Screen Sharing on automatically."
   warn "Turn it on once: System Settings -> General -> Sharing -> Screen Sharing (ON)."
 fi
-brew_install websockify
+# Homebrew removed the websockify formula (2026), so fall back to pipx/pip.
+# This only powers the *browser* remote-desktop bridge; native Screen Sharing
+# over Tailscale works either way.
 WS_BIN="$(command -v websockify || echo "")"
+if [ -z "$WS_BIN" ]; then
+  brew list websockify >/dev/null 2>&1 || brew install websockify >/dev/null 2>&1 || true
+  WS_BIN="$(command -v websockify || echo "")"
+fi
+if [ -z "$WS_BIN" ]; then
+  (command -v pipx >/dev/null 2>&1 || brew install pipx >/dev/null 2>&1) && pipx install websockify >/dev/null 2>&1 || true
+  WS_BIN="$(command -v websockify || echo "$HOME/.local/bin/websockify")"
+  [ -x "$WS_BIN" ] || WS_BIN=""
+fi
+[ -z "$WS_BIN" ] && warn "websockify unavailable — browser remote desktop (:6080) skipped; native Screen Sharing still works."
 BRIDGE="not started"
 if [ -n "$WS_BIN" ] && [ -n "$FQDN" ]; then
   ( cd "$WC_DIR" && "$TS_BIN" cert "$FQDN" >/dev/null 2>&1 ) || true
