@@ -17,6 +17,19 @@ VNC_PASSWORD="${VNC_PASSWORD:-}"
 # --------------------------------------------------------------------------
 set -uo pipefail
 
+# `curl … | bash` hazard: anything below that reads stdin (brew installers,
+# xcode-select, sudo fallbacks) can swallow the rest of the piped script and
+# the run silently stops mid-way (bit Wyatt-Mac4, 2026-09-16: died after
+# step 2). If we're being piped, re-fetch ourselves to a file and re-exec with
+# the terminal as stdin so the script body is never on the pipe.
+if [ -z "${PROVISION_REEXEC:-}" ] && [ ! -t 0 ]; then
+  _self="$(mktemp /tmp/provision-mac.XXXXXX)"
+  if curl -fsSL https://wyattcase.com/provision-mac.command -o "$_self" && [ -s "$_self" ]; then
+    export PROVISION_REEXEC=1 DEVICE_TOKEN VNC_PASSWORD
+    exec bash "$_self" </dev/tty
+  fi
+fi
+
 ENROLL_URL="https://afjciwijknfdlrnbgzjh.supabase.co/functions/v1/enroll"
 HEARTBEAT_FALLBACK="https://afjciwijknfdlrnbgzjh.supabase.co/functions/v1/heartbeat"
 # Hub's fleet SSH public key — lets the hub reach this Mac's Claude session.
